@@ -19,3 +19,8 @@ POST http://localhost:8080/users
 // Http GET request
 
 GET http://localhost:8080/users/123
+
+
+###
+// Delete the user by id
+// TODO: Assignment

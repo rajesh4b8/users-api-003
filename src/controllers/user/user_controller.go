@@ -3,7 +3,9 @@ package user
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/rajesh4b8/users-api-003/src/domain/users"
 	"github.com/rajesh4b8/users-api-003/src/services"
 )
@@ -25,7 +27,28 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(u)
+}
+
+func GetUserHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userIdStr := vars["userId"]
+	userId, err := strconv.Atoi(userIdStr)
+	if err != nil {
+		// error handling
+		return
+	}
+
+	user, getUserErr := services.GetUser(userId)
+	if getUserErr != nil {
+		// error handling
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(user)
 }
