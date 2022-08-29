@@ -25,3 +25,14 @@ func GetUserById(id int) (*User, error) {
 
 	return user, nil
 }
+func DeleteUserById(id int) (*User, error) {
+	user, ok := usersDB[id]
+
+	if !ok {
+		return nil, fmt.Errorf("User with id %v not found", id)
+	}
+	delete(usersDB, user.Id)
+	fmt.Println("deleted user", user.Id)
+
+	return user, nil
+}

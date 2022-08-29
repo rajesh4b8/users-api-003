@@ -12,3 +12,7 @@ func CreateUser(u users.User) (*users.User, error) {
 func GetUser(userId int) (*users.User, error) {
 	return users.GetUserById(userId)
 }
+
+func DeleteUser(userId int) (*users.User, error) {
+	return users.DeleteUserById(userId)
+}
