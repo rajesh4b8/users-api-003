@@ -14,7 +14,7 @@ func mapUrls() {
 	router.HandleFunc("/users/{userId}", user.GetUserHandler).Methods("GET")
 
 	// Delete user by id
-	// router.HandleFunc("/users/{userId}", user.DeleteUserHandler).Methods("DELETE")
+	router.HandleFunc("/users/{userId}", user.DeleteUserHandler).Methods("DELETE")
 
 	// list all the users
 	// router.HandleFunc("/listAllUsers", user.ListAllUsersHandler).Methods("GET")

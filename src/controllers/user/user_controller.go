@@ -52,3 +52,23 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(user)
 }
+func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userIdStr := vars["userId"]
+	userId, err := strconv.Atoi(userIdStr)
+	if err != nil {
+		// error handling
+		return
+	}
+
+	user, delUserErr := services.DeleteUser(userId)
+	if delUserErr != nil {
+		// error handling
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(user)
+}
