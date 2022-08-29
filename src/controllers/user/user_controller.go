@@ -8,27 +8,27 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rajesh4b8/users-api-003/src/domain/users"
 	"github.com/rajesh4b8/users-api-003/src/services"
+	"github.com/rajesh4b8/users-api-003/src/utils/error_util"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user users.User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		// error handling
+		// error handling - bad json
+		error_util.NewBadRequestError("Body must be a valid json").HandleError(w)
 		return
 	}
 
-	var u *users.User
-	u, err = services.CreateUser(user)
-
-	if err != nil {
+	u, restErr := services.CreateUser(user)
+	if restErr != nil {
 		// error handling
+		restErr.HandleError(w)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
-
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(u)
 }
 
@@ -37,21 +37,24 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	userIdStr := vars["userId"]
 	userId, err := strconv.Atoi(userIdStr)
 	if err != nil {
-		// error handling
+		// userId is not a number
+		error_util.NewBadRequestError("userId must be a number").HandleError(w)
+
 		return
 	}
 
 	user, getUserErr := services.GetUser(userId)
 	if getUserErr != nil {
 		// error handling
+		getUserErr.HandleError(w)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
+
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userIdStr := vars["userId"]
@@ -67,8 +70,8 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(user)
 }
