@@ -8,7 +8,6 @@ GET http://localhost:8080/ping
 POST http://localhost:8080/users
 
 {
-    "id": 123,
     "first_name": "Test",
     "last_name":"Reddy",
     "email_id" : "test@test.com"
@@ -18,7 +17,7 @@ POST http://localhost:8080/users
 // Read User by id
 // Http GET request
 
-GET http://localhost:8080/users/123
+GET http://localhost:8080/users/sdgs
 
 
 ###
