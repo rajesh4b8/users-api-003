@@ -2,11 +2,13 @@ package user
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/rajesh4b8/users-api-003/src/domain/users"
+	"github.com/rajesh4b8/users-api-003/src/logger"
 	"github.com/rajesh4b8/users-api-003/src/services"
 	"github.com/rajesh4b8/users-api-003/src/utils/error_util"
 )
@@ -38,6 +40,7 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := strconv.Atoi(userIdStr)
 	if err != nil {
 		// userId is not a number
+		logger.GetLogger().Warn(fmt.Sprintf("UserId must be number but got %v", userIdStr))
 		error_util.NewBadRequestError("userId must be a number").HandleError(w)
 
 		return

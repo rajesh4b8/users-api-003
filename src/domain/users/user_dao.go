@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/rajesh4b8/users-api-003/src/datastore/postgres/users_db"
+	"github.com/rajesh4b8/users-api-003/src/logger"
 	"github.com/rajesh4b8/users-api-003/src/utils/error_util"
 )
 
@@ -24,7 +25,8 @@ func (user *User) Save() *error_util.RestErr {
 
 	stmt, err := users_db.Client.Prepare(querySaveUser)
 	if err != nil {
-		return error_util.NewInternalServerError(err.Error())
+		logger.GetLogger().Error("Error while preparing stmt for save user " + err.Error())
+		return error_util.NewInternalServerError("Internal error with DB!")
 	}
 
 	// defer will call the close function before returning from the current function
@@ -33,7 +35,8 @@ func (user *User) Save() *error_util.RestErr {
 	result := stmt.QueryRow(user.FirstName, user.LastName, user.EmailId)
 
 	if err := result.Scan(&user.Id, &user.DateCreated); err != nil {
-		return error_util.NewInternalServerError(err.Error())
+		logger.GetLogger().Error("Error while saving the user " + err.Error())
+		return error_util.NewInternalServerError("Internal error while saving the user to DB")
 	}
 
 	return nil
@@ -47,7 +50,8 @@ func GetUserById(id int) (*User, *error_util.RestErr) {
 
 	stmt, err := users_db.Client.Prepare(queryUserById)
 	if err != nil {
-		return nil, error_util.NewInternalServerError(err.Error())
+		logger.GetLogger().Error("Error while preparing stmt for reading user by id " + err.Error())
+		return nil, error_util.NewInternalServerError("Internal error with DB!")
 	}
 
 	// defer will call the close function before returning from the current function

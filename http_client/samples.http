@@ -17,7 +17,7 @@ POST http://localhost:8080/users
 // Read User by id
 // Http GET request
 
-GET http://localhost:8080/users/sdgs
+GET http://localhost:8080/users/2
 
 
 ###
